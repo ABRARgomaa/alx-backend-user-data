@@ -17,7 +17,16 @@ class Auth:
         :param excluded_paths:list of paths not require authentication
         :return: False (default implementation)
         """
-        return False
+        if path is None:
+            return True
+        if excluded_paths is None or len(excluded_paths) == 0:
+            return True
+        cleaned_path = path.rstrip('/')
+        for excluded_path in excluded_paths:
+            cleaned_excluded_path = excluded_path.rstrip('/')
+            if cleaned_path == cleaned_excluded_path:
+                return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """

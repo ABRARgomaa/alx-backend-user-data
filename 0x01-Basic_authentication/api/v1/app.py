@@ -23,9 +23,14 @@ def not_found(error) -> str:
 
 @app.errorhandler(401)
 def not_authorized(error) -> str:
-    """not authorized handler
-    """
+    """ Unauthorized handler """
     return jsonify({"error": "Unauthorized"}), 401
+
+
+@app.errorhandler(500)
+def internal_server_error(error) -> str:
+    """ Internal server error handler """
+    return jsonify({"error": "Internal server error"}), 500
 
 
 if __name__ == "__main__":

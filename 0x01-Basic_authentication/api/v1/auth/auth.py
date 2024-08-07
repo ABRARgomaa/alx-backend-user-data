@@ -1,48 +1,42 @@
 #!/usr/bin/env python3
-"""auth.py
+"""
+auth module
 """
 
 from flask import request
 from typing import List, TypeVar
-
-User = TypeVar('User')
+from fnmatch import fnmatch
 
 
 class Auth:
-    """auth class"""
+    """
+    auth class
+    """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
-        Determines if the given path requires authentication.
-        :param path: The path to check
-        :param excluded_paths:list of paths not require authentication
-        :return: False (default implementation)
+        require auth func
         """
-        if path is None:
+        if path is None or excluded_paths is None or not excluded_paths:
             return True
-        if excluded_paths is None or len(excluded_paths) == 0:
-            return True
-        cleaned_path = path.rstrip('/')
-        for excluded_path in excluded_paths:
-            cleaned_excluded_path = excluded_path.rstrip('/')
-            if cleaned_path == cleaned_excluded_path:
+        if not path.endswith('/'):
+            path += '/'
+        for pattern in excluded_paths:
+            if fnmatch(path, pattern.rstrip('/') + '*'):
                 return False
         return True
 
     def authorization_header(self, request=None) -> str:
         """
-        Retrieves the authorization header from the request.
-        :param request: The request object
-        :return: None (default implementation)
+        authorization_header func
         """
         if request is None:
             return None
-        auth_header = request.headers.get('Authorization')
-        return auth_header
+        if 'Authorization' not in request.headers:
+            return None
+        return request.headers['Authorization']
 
-    def current_user(self, request=None) -> User:
+    def current_user(self, request=None) -> TypeVar('User'):
         """
-        Retrieves the current user from the request.
-        :param request: The request object
-        :return: None (default implementation)
+        current_user func
         """
         return None

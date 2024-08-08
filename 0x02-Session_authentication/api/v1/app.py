@@ -18,6 +18,11 @@ auth = None
 
 auth_type = getenv('AUTH_TYPE', 'None')
 
+if auth_type == 'session_auth':
+    auth_module = importlib.import_module('api.v1.auth.session_auth')
+    AuthClass = getattr(auth_module, 'SessionAuth', None)
+    if AuthClass:
+        auth = AuthClass
 if auth_type == 'basic_auth':
     auth_module = importlib.import_module('api.v1.auth.basic_auth')
     AuthClass = getattr(auth_module, 'BasicAuth', None)

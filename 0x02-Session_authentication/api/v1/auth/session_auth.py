@@ -7,6 +7,7 @@ from uuid import uuid4
 class SessionAuth(Auth):
     """session calss"""
     user_id_by_session_id = {}
+
     def create_session(self, user_id: str = None) -> str:
         """creat_session method"""
         if user_id is None:
